@@ -12,6 +12,11 @@ app = FastAPI()
 
 #Models
 
+class Location(BaseModel):
+    city: str
+    state: str
+    country: str
+
 class Person(BaseModel):
     first_name: str
     las_name: str
@@ -56,6 +61,21 @@ def show_person(
 ):
     return {person_id "it exist!"}
 
+#validations:request body
 
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = path(
+    ...,
+    title="Person ID",
+    description="THis is the person ID",
+    gt=0
+    ),
+    person: Person = Body(...),
+    Location: Location = Body(...)
+):
+    results = person.dick()#es difisil retornar 2 valores, por eso lo convertimos a diccionario
+    results .update(location.dict())
+    return results
 
 
