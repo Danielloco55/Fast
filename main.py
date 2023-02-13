@@ -79,11 +79,12 @@ def show_person(
     max_length=50,
     title="Person name", #este seria el titulo de nuestra documentacion interactiva
     description="this is the persons name. between 1 and 50 characters" #esta es la desc de nuestra docu interactiva
-    ),
+    , example="Daniel"),
     age: str = Query(
     ...,
     title="Person age",
-    description="this is the person age. its requered"
+    description="this is the person age. its requered",
+    example="27"
     )
 ):
     return {name: age}
@@ -92,7 +93,10 @@ def show_person(
 
 @app.get("/person/detail/{person_id}")
 def show_person(
-    person_id: int = Path(..., gt=0)
+    person_id: int = Path(
+    ...,
+    gt=0,
+    example="123")
 ):
     return {person_id "it exist!"}
 
@@ -104,7 +108,8 @@ def update_person(
     ...,
     title="Person ID",
     description="THis is the person ID",
-    gt=0
+    gt=0,
+    example=123
     ),
     person: Person = Body(...),
     Location: Location = Body(...)
