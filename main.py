@@ -1,8 +1,10 @@
 #python
-from typing import optional
+from typing import Optional
+from enum import Enum
 
 #pydantic
 from pydantic import BaseModel
+from pydantic import Field
 
 #FastAPI
 from fastapi import FastAPI
@@ -12,18 +14,51 @@ app = FastAPI()
 
 #Models
 
+class HairColor(Enum):
+    white = "White"
+    brown = "Borwn"
+    Black = "Black"
+    Blonde = "Blonde"
+    red = "red"
+
 class Location(BaseModel):
     city: str
     state: str
     country: str
 
 class Person(BaseModel):
-    first_name: str
-    las_name: str
-    age: int
-    hair_color: optional[str] = None
-    is_married: optional[bool] = None
-
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+        example= "Daniel"
+        )
+    las_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+        example= "Gonzalez"
+        )
+    age: int = Field(
+        ...,
+        gt=0,
+        le=115
+        example=25
+    )
+    hair_color: optional[HairColor] = Field(default=None, example="black")
+    is_married: optional[bool] = Field(default=None, example=False)
+"""
+class Config:
+    schema_extra = {
+        "example": {
+        "first_name": "Daniel"
+        "last_name": "Gonzalez Acosta",
+        "age": 21,
+        "hair_color": "blonde",
+        "is_married": False
+        }
+    }
+"""
 @app.get("/")
 def home():
     return {"Hello": "world"}
