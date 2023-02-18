@@ -26,7 +26,7 @@ class Location(BaseModel):
     state: str
     country: str
 
-class Person(BaseModel):
+class PersonBase(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
@@ -47,25 +47,30 @@ class Person(BaseModel):
     )
     hair_color: optional[HairColor] = Field(default=None, example="black")
     is_married: optional[bool] = Field(default=None, example=False)
-"""
-class Config:
-    schema_extra = {
-        "example": {
-        "first_name": "Daniel"
-        "last_name": "Gonzalez Acosta",
-        "age": 21,
-        "hair_color": "blonde",
-        "is_married": False
-        }
-    }
-"""
+    
+class Person(PersonBase):
+    password: str = Field(..., min_length=8)
+
+#class Config:
+    #schema_extra = {
+        #"example": {
+        #"first_name": "Daniel"
+        #"last_name": "Gonzalez Acosta",
+        #"age": 21,
+        #"hair_color": "blonde",
+        #"is_married": False
+        #}
+    #}
+
+class personOut(PersonBase):
+   
+
 @app.get("/")
 def home():
     return {"Hello": "world"}
-
 #request and response body
 
-@app.post("/person/new")  #path operation decorator
+@app.post("/person/new", response_model=PersonOut)  #path operation decorator
 def create_person(person: Person = Body(...)): #path operation function
     return Person
 
