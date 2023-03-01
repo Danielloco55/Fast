@@ -12,7 +12,7 @@ from fastapi import status
 from fastapi import Body, Query
 
 app = FastAPI()
-
+#
 #Models
 
 class HairColor(Enum):
